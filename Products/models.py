@@ -3,6 +3,8 @@ from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.utils.html import mark_safe
+
 
 class IntegerRangeField(models.IntegerField):
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
@@ -31,6 +33,8 @@ class Product(models.Model):
     def __str__(self) :
         return self.title
 
+    def cover_preview(self):
+        return mark_safe(f"<img src='{self.cover.url}' width=70 height=70></img>")
 
 
 
@@ -42,7 +46,7 @@ class Comment(models.Model):
         ('4', _('Good')),
         ('5', _('Perfect')),
     )
-
+    
     body = models.TextField(verbose_name=_('Comment text'))
     rating = models.CharField(choices=RATING_CHOICES, default='3', max_length=1, verbose_name=_('your score'))
     active = models.BooleanField(default=True, verbose_name=_('is this comment active'))

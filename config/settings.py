@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'Products',
     'Cart',
     'Orders',
+    'Blog',
 ]
 
 MIDDLEWARE = [
@@ -149,8 +150,11 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 SITE_ID = 1
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE':2,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE':2,
+    'DEFAULT_PERMISSION_CLASS':[
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_AUTHENTICATION_CLASS':[
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',

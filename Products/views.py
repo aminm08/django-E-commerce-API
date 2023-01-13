@@ -15,6 +15,7 @@ class ProductDetailView(RetrieveAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
+
 class CommentCreateView(CreateAPIView):
     serializer_class = CommentSerializer
     
@@ -23,10 +24,14 @@ class CommentCreateView(CreateAPIView):
         product = get_object_or_404(Product, pk=product_id)
         serializer.save(author=self.request.user, product=product)
 
+
+
 class ProductCommentsView(ListAPIView):
     serializer_class = CommentSerializer
     
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
         return product.comments.all()
+
+    
 
