@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/products/', include('Products.urls')),
     path('api/v1/blogs/', include('Blog.urls')),
     path('api/v1/cart/', include('Cart.urls')),
+    path('api/v1/orders/', include('Orders.urls')),
     path('api/v1/dj-rest-auth/', include('dj_rest_auth.urls')),
     path('api/v1/dj-rest-auth/registration', include('dj_rest_auth.registration.urls'))
   

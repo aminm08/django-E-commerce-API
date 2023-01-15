@@ -3,7 +3,7 @@ from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
 
 
 class IntegerRangeField(models.IntegerField):
@@ -32,6 +32,10 @@ class Product(models.Model):
 
     def __str__(self) :
         return self.title
+
+    def get_final_price(self):
+        return float(self.price - (self.price*self.discount/100))
+
 
     def cover_preview(self):
         return mark_safe(f"<img src='{self.cover.url}' width=70 height=70></img>")
