@@ -30,7 +30,7 @@ class Cart:
             item['total_price'] = item['product_obj'].get_final_price() * item['quantity']
             yield item
 
-    def add(self, product, quantity, replace_current_quantity):
+    def add(self, product, quantity:int, replace_current_quantity):
 
         product_id = str(product.id)
         if product_id not in self.cart:
@@ -60,7 +60,8 @@ class Cart:
 
 
     def get_total_price(self):
-        return sum(item['quantity']*item['product_obj'].get_final_price() for item in self.cart.values())
+       
+        return sum(item['total_price'] for item in self)
 
 
     def is_empty(self):

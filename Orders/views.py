@@ -1,9 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
 from .models import Order, OrderItem
 from .serializers import OrderSerializer
 from Cart.cart import Cart
+from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.authtoken.models import Token
+
+
+class PermTok(BasePermission):
+    def has_permission(self, request, view):
+        try:
+            token = request.META['HTTP_AUTHORIZATION'].split()[1]
+            print(token)
+        except: 
+            return HTTP_401_UNAUTHORIZED
+        return request.user ==Token.objects.get(key=token).user
 
 
 class CreateOrderView(APIView):
@@ -29,4 +41,10 @@ class CreateOrderView(APIView):
 
         
 
-    
+class GetUserOrders(APIView):
+    permission_classes = (PermTok, )
+    def get(self, request):
+        print(request.user)
+        orders = request.user.orders.values()
+        
+        return Response(orders)

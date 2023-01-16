@@ -1,15 +1,16 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from Products.models import Product
 from .cart import Cart
 from .serializers import CartSerializer
 
 
-class GetCartItems(APIView):
-
-    
+class GetCartItems(APIView, LimitOffsetPagination):
+    default_limit = 3
     def get(self, request):
         cart = Cart(request)
         items = []
@@ -19,12 +20,15 @@ class GetCartItems(APIView):
                 'title':obj.title,
                 'price':obj.price,
                 'discount':obj.discount,
+                'final_price':obj.get_final_price(),
                 'cover':obj.cover.url,
                 }
             i['product_obj'] = product
             items.append(i)
+        results = self.paginate_queryset(items, request, view=self)
+
         
-        return Response(items)
+        return self.get_paginated_response(results)
 
 
 class AddCartItem(APIView):
@@ -66,3 +70,10 @@ class ClearCart(APIView):
             cart.clear()
             return Response({'message':'cart cleared'})
         return Response({'message':'cart is already empty'})
+
+
+@api_view(['GET'])
+def get_final_price_view(request):
+    cart = Cart(request)
+
+    return Response(cart.get_total_price())

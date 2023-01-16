@@ -20,7 +20,7 @@ class Product(models.Model):
     title = models.CharField(max_length=100, verbose_name=_('product title'))
     description = RichTextField(verbose_name=_('product description'))
     price = models.PositiveIntegerField(default=0, verbose_name=_('product price'))
-    discount = IntegerRangeField(min_value=0, max_value=100, default=0, verbose_name=_('discount on this product'))
+    discount = IntegerRangeField(min_value=0, max_value=100, verbose_name=_('discount on this product'), default=0)
     active = models.BooleanField(default=True, verbose_name=_('is this product available'))
     cover = models.ImageField(upload_to='product_covers/', verbose_name=_('Product cover'), blank=True)
     slug = models.SlugField(null=True)

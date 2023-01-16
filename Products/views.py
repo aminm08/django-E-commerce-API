@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 
 class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
-    pagination_class = LimitOffsetPagination
+    # pagination_class = LimitOffsetPagination
     queryset = Product.objects.filter(active=True)
 
 
