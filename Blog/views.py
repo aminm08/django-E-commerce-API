@@ -3,6 +3,7 @@ from .serializers import BlogSerializers
 from .models import BlogPost
 
 class BlogListView(ListAPIView):
+    
     serializer_class = BlogSerializers
     queryset = BlogPost.objects.filter(status='p')
 

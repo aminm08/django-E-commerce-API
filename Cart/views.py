@@ -4,12 +4,14 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from Products.models import Product
 from .cart import Cart
 from .serializers import CartSerializer
 
 
 class GetCartItems(APIView, LimitOffsetPagination):
+    permission_classes = (AllowAny, )
     default_limit = 3
     def get(self, request):
         cart = Cart(request)
@@ -32,6 +34,7 @@ class GetCartItems(APIView, LimitOffsetPagination):
 
 
 class AddCartItem(APIView):
+    permission_classes = (AllowAny, )
     serializer_class = CartSerializer
 
     def post(self, request, product_id):
@@ -54,7 +57,7 @@ class AddCartItem(APIView):
         
 
 class RemoveFromCart(APIView):
-
+    permission_classes = (AllowAny, )
     def delete(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
         cart = Cart(request)
@@ -64,6 +67,7 @@ class RemoveFromCart(APIView):
 
 
 class ClearCart(APIView):
+    permission_classes = (AllowAny, )
     def delete(self, request):
         cart = Cart(request)
         if len(cart):
