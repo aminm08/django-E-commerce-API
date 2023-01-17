@@ -165,3 +165,12 @@ REST_FRAMEWORK = {
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+#allauth 
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True

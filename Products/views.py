@@ -1,11 +1,13 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from .serializers import ProductSerializer, CommentSerializer
 from .models import Product, Comment
 from django.shortcuts import get_object_or_404
 
 
 class ProductListView(ListAPIView):
+    
     serializer_class = ProductSerializer
     # pagination_class = LimitOffsetPagination
     queryset = Product.objects.filter(active=True)
@@ -17,6 +19,8 @@ class ProductDetailView(RetrieveAPIView):
 
 
 class CommentCreateView(CreateAPIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
     serializer_class = CommentSerializer
     
     def perform_create(self, serializer):
