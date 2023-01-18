@@ -16,6 +16,11 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
+class AvailableManager(models.Manager):
+    def get_quesryset(self):
+        return super(AvailableManager, self).get_queryset().filter(active=True, quantity__gte=1) 
+
+
 class Product(models.Model):
     title = models.CharField(max_length=100, verbose_name=_('product title'))
     description = RichTextField(verbose_name=_('product description'))
@@ -24,6 +29,8 @@ class Product(models.Model):
     active = models.BooleanField(default=True, verbose_name=_('is this product available'))
     cover = models.ImageField(upload_to='product_covers/', verbose_name=_('Product cover'), blank=True)
     slug = models.SlugField(null=True)
+    objects = models.Manager()
+    available = AvailableManager()
     # category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.CASCADE, related_name='products')
 
     datetime_created = models.DateTimeField(verbose_name=_('Creation date time'), default=timezone.now)
