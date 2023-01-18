@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
-
+from django.urls import reverse
 
 class IntegerRangeField(models.IntegerField):
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
@@ -40,6 +40,10 @@ class Product(models.Model):
     def __str__(self) :
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('product_detail', args=[self.pk])
+
+
     def get_final_price(self):
         return float(self.price - (self.price*self.discount/100))
 
@@ -47,7 +51,7 @@ class Product(models.Model):
     def cover_preview(self):
         return mark_safe(f"<img src='{self.cover.url}' width=70 height=70></img>")
 
-
+    
 
 class Comment(models.Model):
     RATING_CHOICES = (

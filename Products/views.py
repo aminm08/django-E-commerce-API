@@ -1,43 +1,31 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import authentication
-from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from .paginations import ProductPagination, CommentPagination
 from .serializers import ProductSerializer, CommentSerializer
 from .models import Product, Comment
-from django.shortcuts import get_object_or_404
 
-# class DefaultsMixin(object):
-#     authentication_classes = (
-#         authentication.SessionAuthentication,
-#         authentication.TokenAuthentication
-#     )
-#     permission_classes = (
-#         IsAuthenticated
-#     )
-#     paginate_by = 25
-#     paginate_by_param = 'page_size'
-#     max_paginate_by = 100
-#     filter_backends = (
 
-#     )
-
-# class ProductViewSet(ModelViewSet):
-#     queryset = Product.available.all()
-#     serializer_class =  ProductSerializer
 
 
 class ProductListView(ListAPIView):
-    pagination_class = LimitOffsetPagination
-    paginate_by = 25
+    pagination_class = ProductPagination
     queryset = Product.available.all()
     serializer_class = ProductSerializer
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    
+    search_fields = ['title', 'price']
+    ordering_fields = ['discount', 'price']
+    
 
 
 class ProductDetailView(RetrieveAPIView):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.available.all()
+    
 
 
 class CommentCreateView(CreateAPIView):
@@ -52,9 +40,9 @@ class CommentCreateView(CreateAPIView):
 
 
 
-class ProductCommentsView(ListAPIView, LimitOffsetPagination):
+class ProductCommentsView(ListAPIView):
     serializer_class = CommentSerializer
-    default_limit = 10
+    pagination_class = CommentPagination
 
     
     def get_queryset(self):

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'ckeditor',
+    'django_filters',
 
 
     #local apps
@@ -151,8 +152,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 SITE_ID = 1
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE':2,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE':2,
     'DEFAULT_PERMISSION_CLASS':[
         'rest_framework.permissions.IsAuthenticated',
     ],
