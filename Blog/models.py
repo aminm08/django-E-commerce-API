@@ -1,8 +1,12 @@
 from django.db import models
+from django.urls import reverse
 from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import mark_safe
+
+
+
 class BlogPost(models.Model):
     STATUS_CHOICES = (
         ('p', 'Published'),
@@ -20,6 +24,9 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog-detail', args=[self.pk])
 
     def cover_preview(self):
         return mark_safe(f"<img src='{self.cover.url}' width=70 height=70></img>")

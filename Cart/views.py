@@ -11,7 +11,6 @@ from .serializers import CartSerializer
 
 
 class GetCartItems(APIView, LimitOffsetPagination):
-    permission_classes = (AllowAny, )
     default_limit = 10
     def get(self, request):
         cart = Cart(request)
@@ -32,7 +31,6 @@ class GetCartItems(APIView, LimitOffsetPagination):
 
 
 class AddCartItem(APIView):
-    permission_classes = (AllowAny, )
     serializer_class = CartSerializer
 
     def post(self, request, product_id):
@@ -55,17 +53,15 @@ class AddCartItem(APIView):
         
 
 class RemoveFromCart(APIView):
-    permission_classes = (AllowAny, )
     def delete(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
         cart = Cart(request)
-        print(cart)
         cart.remove(product)
         return Response(str(cart))
 
 
 class ClearCart(APIView):
-    permission_classes = (AllowAny, )
+
     def delete(self, request):
         cart = Cart(request)
         if len(cart):

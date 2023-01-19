@@ -12,7 +12,7 @@ from .models import Product
 
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
-    permission_classes = (IsAuthenticated, UserPermission)
+    permission_classes = (UserPermission, )
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = ProductPagination
     search_fields = ['title', 'price']
@@ -21,8 +21,7 @@ class ProductViewSet(ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_staff  :
             return Product.objects.all()
-        else:
-            return Product.available.all()
+        return Product.available.all()
 
 
 

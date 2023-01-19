@@ -8,7 +8,7 @@ class UserPermission(BasePermission):
             return True
         
         else:
-            return request.user.is_staff
+            return  request.user.is_staff
             
     
         

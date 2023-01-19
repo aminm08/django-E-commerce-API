@@ -38,8 +38,8 @@ class CreateOrderView(APIView):
 class GetUserOrders(APIView):
     permission_classes = (IsAuthenticated, )
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    ordering_field = ['datetime_created', 'status', 'is_paid']
-    search_field = ['first_name', 'last_name']
+    ordering_fielda = ['datetime_created', 'status', 'is_paid']
+    search_fielda = ['first_name', 'last_name']
 
     def get(self, request):
         orders = request.user.orders.values()
