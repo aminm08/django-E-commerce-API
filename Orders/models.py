@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+
+
 class Order(models.Model):
     ORDER_STATUS_CHOICES =(
         ('su', _('submitted')),

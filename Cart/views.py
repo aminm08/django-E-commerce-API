@@ -12,7 +12,7 @@ from .serializers import CartSerializer
 
 class GetCartItems(APIView, LimitOffsetPagination):
     permission_classes = (AllowAny, )
-    default_limit = 3
+    default_limit = 10
     def get(self, request):
         cart = Cart(request)
         items = []
@@ -28,8 +28,6 @@ class GetCartItems(APIView, LimitOffsetPagination):
             i['product_obj'] = product
             items.append(i)
         results = self.paginate_queryset(items, request, view=self)
-
-        
         return self.get_paginated_response(results)
 
 

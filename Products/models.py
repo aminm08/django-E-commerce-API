@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.utils.text import slugify
 
 class IntegerRangeField(models.IntegerField):
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
@@ -17,8 +18,9 @@ class IntegerRangeField(models.IntegerField):
 
 
 class AvailableManager(models.Manager):
-    def get_quesryset(self):
-        return super(AvailableManager, self).get_queryset().filter(active=True, quantity__gte=1) 
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(active=True)
 
 
 class Product(models.Model):
@@ -41,7 +43,7 @@ class Product(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('product_detail', args=[self.pk])
+        return reverse('product-detail', args=[self.pk])
 
 
     def get_final_price(self):
@@ -51,7 +53,13 @@ class Product(models.Model):
     def cover_preview(self):
         return mark_safe(f"<img src='{self.cover.url}' width=70 height=70></img>")
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
     
+
+
 
 class Comment(models.Model):
     RATING_CHOICES = (
@@ -68,7 +76,7 @@ class Comment(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-
+   
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_modified = models.DateTimeField(auto_now=True)
 
