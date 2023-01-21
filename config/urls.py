@@ -17,6 +17,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import permissions # new
+from drf_yasg.views import get_schema_view # new
+from drf_yasg import openapi
+ 
+schema_view = get_schema_view( # new
+    openapi.Info(
+        title="E-Commerce API",
+        default_version="v1",
+        description="A sample API for learning DRF",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="hello@example.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 
 urlpatterns = [
@@ -25,9 +42,14 @@ urlpatterns = [
     path('api/v1/blogs/', include('Blog.urls')),
     path('api/v1/cart/', include('Cart.urls')),
     path('api/v1/orders/', include('Orders.urls')),
+    path('api/v1/wish-list/', include('wishes.urls')),
     path('api/v1/accounts/', include('dj_rest_auth.urls')),
     path('api/v1/accounts/', include('accounts.urls')),
-    path('api/v1/account/signup/', include('dj_rest_auth.registration.urls'))
+    path('api/v1/accounts/signup/', include('dj_rest_auth.registration.urls')),
+    path('swagger/', schema_view.with_ui(
+      'swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui(
+       'redoc', cache_timeout=0), name='schema-redoc'),
   
 ]
 
